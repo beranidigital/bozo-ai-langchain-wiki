@@ -6,6 +6,7 @@ from langchain_core.tools import tool
 import requests
 from bs4 import BeautifulSoup
 import markdownify
+import json
 
 def reroute_to_correct_tools(url: str):
     """
@@ -27,8 +28,12 @@ def reroute_to_correct_tools(url: str):
     else:
         return None
     if type(result) is not str:
-        result = json.dumps(result)
-    return f"Rerouted to correct tool: {used_tools}. Result: {result}"
+        return {
+            "message": f"Rerouted to correct tool: {used_tools}",
+            'result': result,
+        }
+    else:
+        return f"Rerouted to correct tool: {used_tools}. Result:\n{result}"
 
 @tool
 def search_wiki(query: str):
@@ -160,13 +165,16 @@ def read_book(url: str):
         return "Invalid URL, must be this pattern https://wiki.beranidigital.id/books/*/page/*"
 
     page = requests.get(url)
+    if page.status_code != 200:
+        if page.status_code == 404:
+            return "Wrong URL. Page not found."
+        return "Page not found."
     soup = BeautifulSoup(page.content, 'html.parser')
     content = soup.find('main', {'class': ['content-wrap', 'card']})
     content = markdownify.markdownify(str(content), heading_style="ATX")
     return content
 
 if __name__ == '__main__':
-    import json
     shelve_listed = list_shelves()
     jsoned_shelves = json.dumps(shelve_listed)
     print("Length: ", len(jsoned_shelves))
@@ -184,11 +192,11 @@ if __name__ == '__main__':
     read_book_result = read_book(random_item['link'])
     print(read_book_result)
     results = search_wiki("Berani Digital ID")
-    for result in results:
-        print(result['header'])
-        print(result['description'])
-        print(result['breadcrumbs'])
-        print(result['link'])
+    for result_aaaaaaaaaaaaa in results:
+        print(result_aaaaaaaaaaaaa['header'])
+        print(result_aaaaaaaaaaaaa['description'])
+        print(result_aaaaaaaaaaaaa['breadcrumbs'])
+        print(result_aaaaaaaaaaaaa['link'])
         print()
     print(read_book(results[0]['link']))
     print("URL: ", results[0]['link'])
