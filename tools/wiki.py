@@ -171,7 +171,7 @@ def read_book(url: str):
             return "Wrong URL. Page not found."
         return "Page not found."
     soup = BeautifulSoup(page.content, 'html.parser')
-    content = soup.find('main', {'class': ['content-wrap', 'card']})
+    content = soup.find('div', {'class': 'page-content'})
     content = markdownify.markdownify(str(content), heading_style="ATX")
     return content
 
