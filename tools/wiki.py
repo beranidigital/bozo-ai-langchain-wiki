@@ -108,7 +108,8 @@ def get_wiki_shelves(url: str = "https://wiki.beranidigital.id/shelves"):
 @tool
 def list_books_from_shelves(url: str):
     """
-    get list of books from a shelf.
+    Get list of books from a shelf.
+    Get the shelf URL from get_wiki_shelves.
     URL must start with https://wiki.beranidigital.id/books/
     """
     if not url.startswith("https://wiki.beranidigital.id/books/"):
@@ -156,8 +157,9 @@ def list_shelves():
 def read_book(url: str):
     """
     Read a book from the wiki.
+    Get the book URL from list_books_from_shelves.
     Don't translate the URL, it must be the exact URL.
-    :param url: must be this pattern https://wiki.beranidigital.id/books/*/page/*
+    URL must be this pattern https://wiki.beranidigital.id/books/*/page/*
     """
     if not regex.match(r"https://wiki.beranidigital.id/books/.*/page/.*", url):
         result = reroute_to_correct_tools(url)
