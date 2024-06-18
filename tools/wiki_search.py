@@ -8,7 +8,8 @@ from bs4 import BeautifulSoup
 @tool
 def search_wiki(query: str):
     """
-    Search for a query on Wiki.
+    Search the Berani Digital ID wiki for a query.
+    Example: search_wiki("Berani Digital ID")
     """
     url = "https://wiki.beranidigital.id/search"
     # Encode the query

@@ -1,6 +1,12 @@
 import os
 
+from langchain_core.language_models import LLM, BaseChatModel
 from langchain_openai import AzureOpenAI, AzureChatOpenAI, AzureOpenAIEmbeddings
+
+from typing import Optional, List, Mapping, Any
+
+
+
 
 completionModel = AzureOpenAI(
     api_version="2023-12-01-preview",
