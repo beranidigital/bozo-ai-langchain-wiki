@@ -13,14 +13,22 @@ def reroute_to_correct_tools(url: str):
     :param url: The URL to reroute.
     :return: The correct tool to use.
     """
+    result = None
+    used_tools = None
     if regex.match(r"https://wiki.beranidigital.id/books/.*/page/.*", url):
-        return read_book(url)
+        result = read_book(url)
+        used_tools = "read_book"
     elif regex.match(r"https://wiki.beranidigital.id/books/.*", url):
-        return list_books_from_shelves(url)
+        result = list_books_from_shelves(url)
+        used_tools = "list_books_from_shelves"
     elif regex.match(r"https://wiki.beranidigital.id/shelves", url):
-        return get_wiki_shelves(url)
+        result = get_wiki_shelves(url)
+        used_tools = "get_wiki_shelves"
     else:
         return None
+    if type(result) is not str:
+        result = json.dumps(result)
+    return f"Rerouted to correct tool: {used_tools}. Result: {result}"
 
 @tool
 def search_wiki(query: str):
