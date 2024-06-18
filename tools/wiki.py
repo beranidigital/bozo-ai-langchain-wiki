@@ -7,6 +7,20 @@ import requests
 from bs4 import BeautifulSoup
 import markdownify
 
+def reroute_to_correct_tools(url: str):
+    """
+    Reroute to the correct tools for the wiki.
+    :param url: The URL to reroute.
+    :return: The correct tool to use.
+    """
+    if regex.match(r"https://wiki.beranidigital.id/books/.*/page/.*", url):
+        return read_book(url)
+    elif regex.match(r"https://wiki.beranidigital.id/books/.*", url):
+        return list_books_from_shelves(url)
+    elif regex.match(r"https://wiki.beranidigital.id/shelves", url):
+        return get_wiki_shelves(url)
+    else:
+        return None
 
 @tool
 def search_wiki(query: str):
@@ -56,7 +70,10 @@ def get_wiki_shelves(url: str = "https://wiki.beranidigital.id/shelves"):
     if returned URL have /shelves/ it means it is a top shelf, keep using this tool until you get links that have /books/
     """
     if not url.startswith("https://wiki.beranidigital.id/shelves"):
-        return "Invalid URL"
+        result = reroute_to_correct_tools(url)
+        if result is not None:
+            return result
+        return "Invalid URL, must start with https://wiki.beranidigital.id/shelves"
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -66,10 +83,12 @@ def get_wiki_shelves(url: str = "https://wiki.beranidigital.id/shelves"):
         header = shelf.find('h2').text
         description = shelf.find('div', {'class': ['grid-card-content']}).text.strip()
         href = shelf['href']
+        is_book = href.startswith("https://wiki.beranidigital.id/books/")
         data[header] = {
             'header': header,
             'description': description,
             'href': href,
+            'is_book': is_book
         }
     return data
 
@@ -80,6 +99,9 @@ def list_books_from_shelves(url: str):
     URL must start with https://wiki.beranidigital.id/books/
     """
     if not url.startswith("https://wiki.beranidigital.id/books/"):
+        result = reroute_to_correct_tools(url)
+        if result is not None:
+            return result
         return "Invalid URL, must start with https://wiki.beranidigital.id/books/"
 
     page = requests.get(url)
@@ -124,6 +146,9 @@ def read_book(url: str):
     :param url: must be this pattern https://wiki.beranidigital.id/books/*/page/*
     """
     if not regex.match(r"https://wiki.beranidigital.id/books/.*/page/.*", url):
+        result = reroute_to_correct_tools(url)
+        if result is not None:
+            return result
         return "Invalid URL, must be this pattern https://wiki.beranidigital.id/books/*/page/*"
 
     page = requests.get(url)
