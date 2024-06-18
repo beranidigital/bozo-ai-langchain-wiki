@@ -156,6 +156,7 @@ def list_shelves():
 def read_book(url: str):
     """
     Read a book from the wiki.
+    Don't translate the URL, it must be the exact URL.
     :param url: must be this pattern https://wiki.beranidigital.id/books/*/page/*
     """
     if not regex.match(r"https://wiki.beranidigital.id/books/.*/page/.*", url):
