@@ -50,9 +50,10 @@ def search_wiki(query: str):
 @tool
 def get_wiki_shelves(url: str = "https://wiki.beranidigital.id/shelves"):
     """
+    Starting point to get information
     Get list of shelves from the wiki.
-    Starting URL: https://wiki.beranidigital.id/shelves
-    :param url: Must start with https://wiki.beranidigital.id/shelves
+    URL must start with https://wiki.beranidigital.id/shelves
+    if returned URL have /shelves/ it means it is a top shelf, keep using this tool until you get links that have /books/
     """
     if not url.startswith("https://wiki.beranidigital.id/shelves"):
         return "Invalid URL"
@@ -73,10 +74,10 @@ def get_wiki_shelves(url: str = "https://wiki.beranidigital.id/shelves"):
     return data
 
 @tool
-def list_books(url: str):
+def list_books_from_shelves(url: str):
     """
     get list of books from a shelf.
-    :param url: must start with https://wiki.beranidigital.id/books/
+    URL must start with https://wiki.beranidigital.id/books/
     """
     if not url.startswith("https://wiki.beranidigital.id/books/"):
         return "Invalid URL, must start with https://wiki.beranidigital.id/books/"
@@ -113,7 +114,7 @@ def list_shelves():
 
     for shelf_key in shelves:
         href = shelves[shelf_key]['href']
-        shelves[shelf_key]['items'] = list_books(href)
+        shelves[shelf_key]['items'] = list_books_from_shelves(href)
     return shelves
 
 @tool

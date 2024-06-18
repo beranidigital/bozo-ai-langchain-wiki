@@ -6,7 +6,7 @@ from langsmith import traceable
 load_dotenv()  # take environment variables from .env.
 
 from typing import List, Any
-from tools.wiki_search import search_wiki, detailed_wiki
+from tools.wiki import search_wiki, list_books_from_shelves, read_book, get_wiki_shelves
 from fastapi import FastAPI
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import FAISS
@@ -33,7 +33,7 @@ embeddings = models.embeddingModel
 vector = FAISS.from_documents(documents, embeddings)
 retriever = vector.as_retriever()
 
-tools_list = [search_wiki, detailed_wiki]
+tools_list = [read_book, list_books_from_shelves, get_wiki_shelves]
 
 # 3. Create Agent
 prompt = ChatPromptTemplate.from_messages([
