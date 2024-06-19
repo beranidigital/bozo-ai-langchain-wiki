@@ -27,13 +27,24 @@ def reroute_to_correct_tools(url: str):
         used_tools = "get_wiki_shelves"
     else:
         return None
-    if type(result) is not str:
+    if result is not None:
         return {
             "message": f"Rerouted to correct tool: {used_tools}",
             'result': result,
         }
-    else:
-        return f"Rerouted to correct tool: {used_tools}. Result:\n{result}"
+
+@tool
+def open_wiki(url: str):
+    """
+    Open the Berani Digital ID wiki.
+    Root URL: https://wiki.beranidigital.id/shelves
+    :param url: The URL to open.
+    :return: The content of the page may include URL.
+    """
+    result = reroute_to_correct_tools(url)
+    if result is not None:
+        return result['result']
+    return "Invalid URL, start with https://wiki.beranidigital.id/shelves"
 
 @tool
 def search_wiki(query: str):
@@ -176,6 +187,8 @@ def read_book(url: str):
     content = soup.find('div', {'class': 'page-content'})
     content = markdownify.markdownify(str(content), heading_style="ATX")
     return content
+
+
 
 if __name__ == '__main__':
     shelve_listed = list_shelves()
