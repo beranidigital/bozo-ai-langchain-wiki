@@ -66,7 +66,7 @@ def search_wiki(query: str):
     for result in results:
         header = result.find('h4').text
         description = result.find('p').text
-        link = result['href']
+        href = result['href']
         breadcrumbs_result = result.find_all('span')
         breadcrumbs = []
         for breadcrumb in breadcrumbs_result:
@@ -79,7 +79,7 @@ def search_wiki(query: str):
             'header': header,
             'description': description,
             'breadcrumbs': breadcrumbs,
-            'link': link
+            'href': href
         })
     return list_result
 
@@ -91,7 +91,7 @@ def get_wiki_shelves(url: str = "https://wiki.beranidigital.id/shelves"):
     Starting point to get information
     Get list of shelves from the wiki.
     URL must start with https://wiki.beranidigital.id/shelves
-    if returned URL have /shelves/ it means it is a top shelf, keep using this tool until you get links that have /books/
+    if returned URL have /shelves/ it means it is a top shelf, keep using this tool until you get hrefs that have /books/
     """
     if not url.startswith("https://wiki.beranidigital.id/shelves"):
         result = reroute_to_correct_tools(url)
@@ -135,12 +135,12 @@ def list_books_from_shelves(url: str):
     data = []
     for item in items:
         text = item.find('h4').text
-        link = item['href']
+        href = item['href']
         description = item.find('p').text.strip()
         data.append({
             'text': text,
             'description': description,
-            'link': link
+            'href': href
         })
     return data
 
@@ -149,7 +149,7 @@ def list_shelves():
     """
     Get the list of shelves.
     Use this to list all the shelves in the Berani Digital ID wiki.
-    :return dict: A dictionary of shelves and list of items (books) link.
+    :return dict: A dictionary of shelves and list of items (books) href.
     """
     top_shelves = get_wiki_shelves("https://wiki.beranidigital.id/shelves")
     shelves = dict()
@@ -200,19 +200,19 @@ if __name__ == '__main__':
         for item in shelve_listed[shelf]['items']:
             print(item['text'])
             print(item['description'])
-            print(item['link'])
+            print(item['href'])
             print()
     random_shelves = list(shelve_listed.keys())
     random_shelf = random.choice(random_shelves)
     random_item = random.choice(shelve_listed[random_shelf]['items'])
-    read_book_result = read_book(random_item['link'])
+    read_book_result = read_book(random_item['href'])
     print(read_book_result)
     results = search_wiki("Berani Digital ID")
     for result_aaaaaaaaaaaaa in results:
         print(result_aaaaaaaaaaaaa['header'])
         print(result_aaaaaaaaaaaaa['description'])
         print(result_aaaaaaaaaaaaa['breadcrumbs'])
-        print(result_aaaaaaaaaaaaa['link'])
+        print(result_aaaaaaaaaaaaa['href'])
         print()
-    print(read_book(results[0]['link']))
-    print("URL: ", results[0]['link'])
+    print(read_book(results[0]['href']))
+    print("URL: ", results[0]['href'])
