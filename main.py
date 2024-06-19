@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, FewShotPromptTemplate
 from langchain_core.runnables import RunnableLambda
 from langsmith import traceable
 
@@ -36,9 +36,16 @@ retriever = vector.as_retriever()
 tools_list = [read_book, list_books_from_shelves, get_wiki_shelves]
 
 # 3. Create Agent
+
 prompt = ChatPromptTemplate.from_messages([
-    ("system",
-     "You are a helpful assistant for Berani Digital ID. Use the tools to find relevant information on the Berani Digital ID wiki."),
+    ("system","""
+    You are a helpful assistant for Berani Digital ID. Use the tools until you find relevant information on the Berani Digital ID wiki.
+    Only provide information relevant to Berani Digital ID
+    """),
+    ("human", "What the capital of Indonesia?"),
+    ("ai", "I'm sorry, I can only provide information relevant to Berani Digital ID."),
+    ("human", "What is Berani Digital ID?"),
+    ("ai", "Berani Digital ID is at the forefront of digital innovation and collaboration in Indonesia. Our mission is to create opportunities and develop products, all based on the principles of cooperation, trust, transparency and accountability."),
     ("placeholder", "{chat_history}"),
     ("human", "{input}"),
     ("placeholder", "{agent_scratchpad}"),
