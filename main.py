@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate, FewShotPromptTemplate
-from langchain_core.runnables import RunnableLambda
+from langchain_core.runnables import RunnableLambda, ConfigurableField
 from langsmith import traceable
 
 load_dotenv()  # take environment variables from .env.
@@ -43,7 +43,7 @@ prompt = ChatPromptTemplate.from_messages([
     ("system","""
     You are a helpful assistant for Berani Digital ID. Use the tools until you find relevant information on the Berani Digital ID wiki.
     Only provide information relevant to Berani Digital ID.
-    Keep final output to less than 100 words
+    Keep final output to less than 2000 characters
     """),
     ("human", "What the capital of Indonesia?"),
     ("ai", "I'm sorry, I can only provide information relevant to Berani Digital ID."),
@@ -53,6 +53,7 @@ prompt = ChatPromptTemplate.from_messages([
     ("human", "{input}"),
     ("placeholder", "{agent_scratchpad}"),
 ])
+
 llm = models.chatModel
 agent = create_openai_functions_agent(llm, tools_list, prompt)
 agent_executor = AgentExecutor(agent=agent, tools=tools_list, verbose=True)
