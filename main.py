@@ -43,7 +43,7 @@ prompt = ChatPromptTemplate.from_messages([
     ("system","""
     You are a helpful assistant for Berani Digital ID. Use the tools until you find relevant information on the Berani Digital ID wiki.
     Only provide information relevant to Berani Digital ID.
-    Keep final output to less than 300 words
+    Keep final output to less than 100 words
     """),
     ("human", "What the capital of Indonesia?"),
     ("ai", "I'm sorry, I can only provide information relevant to Berani Digital ID."),
