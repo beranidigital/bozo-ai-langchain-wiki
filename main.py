@@ -1,3 +1,5 @@
+import os
+
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate, FewShotPromptTemplate
 from langchain_core.runnables import RunnableLambda
@@ -90,5 +92,6 @@ add_routes(
 
 if __name__ == "__main__":
     import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = os.getenv("PORT", 8000)
+    port = int(port)
+    uvicorn.run(app, host="0.0.0.0", port=port)
