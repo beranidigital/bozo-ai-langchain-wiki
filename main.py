@@ -45,6 +45,7 @@ prompt = ChatPromptTemplate.from_messages([
     Only provide information relevant to Berani Digital ID.
     Keep final output to less than 2000 characters.
     Cite the source using markdown.
+    Respond with according to language user used.
     """),
     ("human", "What the capital of Indonesia?"),
     ("ai", "I'm sorry, I can only provide information relevant to Berani Digital ID."),
