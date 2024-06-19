@@ -93,7 +93,6 @@ async def search_wiki(query: str):
             return list_result
 
 
-@tool
 async def get_wiki_shelves(url: str = "https://wiki.beranidigital.id/shelves"):
     """
     Starting point to get information
@@ -128,7 +127,6 @@ async def get_wiki_shelves(url: str = "https://wiki.beranidigital.id/shelves"):
             return data
 
 
-@tool
 async def list_books_from_shelves(url: str):
     """
     Get list of books from a shelf.
@@ -179,7 +177,6 @@ async def list_shelves():
     return shelves
 
 
-@tool
 async def read_book(url: str):
     """
     Read a book from the wiki.
@@ -223,7 +220,11 @@ async def main():
     random_item = random.choice(shelve_listed[random_shelf]['items'])
     read_book_result = await read_book(random_item['href'])
     print(read_book_result)
-    results = await search_wiki("Berani Digital ID")
+    results = await search_wiki.arun(
+        {
+            "query": "Berani Digital ID"
+        },
+    )
     for result in results:
         print(result['header'])
         print(result['description'])
