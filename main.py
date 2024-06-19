@@ -35,7 +35,7 @@ embeddings = models.embeddingModel
 vector = FAISS.from_documents(documents, embeddings)
 retriever = vector.as_retriever()
 
-tools_list = [open_wiki]
+tools_list = [open_wiki, search_wiki]
 
 # 3. Create Agent
 

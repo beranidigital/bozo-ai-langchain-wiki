@@ -15,8 +15,10 @@ completionModel = AzureOpenAI(
 )
 
 chatModel = AzureChatOpenAI(
+    max_tokens=4096,
     api_version="2023-12-01-preview",
     deployment_name=os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"),
+
 ).configurable_fields(
     max_tokens=ConfigurableField(
         id="output_token_number",

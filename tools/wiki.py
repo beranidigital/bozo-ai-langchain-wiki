@@ -8,6 +8,10 @@ from bs4 import BeautifulSoup
 import markdownify
 import json
 
+import models
+
+
+
 def reroute_to_correct_tools(url: str):
     """
     Reroute to the correct tools for the wiki.
@@ -36,20 +40,20 @@ def reroute_to_correct_tools(url: str):
 @tool
 def open_wiki(url: str):
     """
-    Open the Berani Digital ID wiki.
-    Root URL: https://wiki.beranidigital.id/shelves
+    Explore the Berani Digital ID wiki.
+    Try start with root URL: https://wiki.beranidigital.id/shelves
     :param url: The URL to open.
     :return: The content of the page may include URL.
     """
     result = reroute_to_correct_tools(url)
     if result is not None:
         return result['result']
-    return "Invalid URL, start with https://wiki.beranidigital.id/shelves"
+    return "Invalid URL, try start with https://wiki.beranidigital.id/shelves"
 
 @tool
 def search_wiki(query: str):
     """
-    Search the Berani Digital ID wiki for a query.
+    Search the Built-in Berani Digital ID wiki for a query.
     Example: search_wiki("Berani Digital ID")
     """
     url = "https://wiki.beranidigital.id/search"
@@ -63,6 +67,7 @@ def search_wiki(query: str):
     # Get page   entity-list-item
     results = soup.find_all('a', {'class': 'entity-list-item'})
     list_result = []
+    max_results = 5
     for result in results:
         header = result.find('h4').text
         description = result.find('p').text
@@ -81,8 +86,9 @@ def search_wiki(query: str):
             'breadcrumbs': breadcrumbs,
             'href': href
         })
+        if len(list_result) >= max_results:
+            break
     return list_result
-
 
 
 @tool
