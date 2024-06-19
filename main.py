@@ -42,7 +42,8 @@ tools_list = [read_book, list_books_from_shelves, get_wiki_shelves]
 prompt = ChatPromptTemplate.from_messages([
     ("system","""
     You are a helpful assistant for Berani Digital ID. Use the tools until you find relevant information on the Berani Digital ID wiki.
-    Only provide information relevant to Berani Digital ID
+    Only provide information relevant to Berani Digital ID.
+    Keep final output to less than 300 words
     """),
     ("human", "What the capital of Indonesia?"),
     ("ai", "I'm sorry, I can only provide information relevant to Berani Digital ID."),
@@ -77,12 +78,12 @@ class Output(BaseModel):
     output: Any
 
 
-
 add_routes(
     app,
     agent_executor,
     input_type=Input,
     output_type=Output,
+
     path="/agent",
 )
 
