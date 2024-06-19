@@ -24,7 +24,7 @@ import models
 import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig()
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.INFO)
 
 # 1. Load Retriever
 loader = WebBaseLoader("https://docs.smith.langchain.com/user_guide")
@@ -76,15 +76,11 @@ class Input(BaseModel):
 class Output(BaseModel):
     output: Any
 
-@traceable
-def runnable_chain(input: dict):
-    output = agent_executor.invoke(input)
-    return output['output']
 
 
 add_routes(
     app,
-    RunnableLambda(runnable_chain),
+    agent_executor,
     input_type=Input,
     output_type=Output,
     path="/agent",
